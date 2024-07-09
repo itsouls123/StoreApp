@@ -1,0 +1,34 @@
+﻿@page "/suppliers"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject StoreApp.Data.StoreDbContext DB
+@using StoreApp.Data
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="suppliers/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Suppliers">
+    <PropertyColumn Property="supplier => supplier.SuppCode" />
+    <PropertyColumn Property="supplier => supplier.Name" />
+    <PropertyColumn Property="supplier => supplier.RegNo" />
+    <PropertyColumn Property="supplier => supplier.Address" />
+    <PropertyColumn Property="supplier => supplier.ContactNo" />
+    <PropertyColumn Property="supplier => supplier.CreditLimit" />
+    <PropertyColumn Property="supplier => supplier.Balance" />
+    <PropertyColumn Property="supplier => supplier.PaymentDueNext" />
+    <PropertyColumn Property="supplier => supplier.PaymentSchedule" />
+    <PropertyColumn Property="supplier => supplier.VatRegNo" />
+    <PropertyColumn Property="supplier => supplier.BankName" />
+    <PropertyColumn Property="supplier => supplier.BankAccountNumber" />
+    <PropertyColumn Property="supplier => supplier.SortCode" />
+
+    <TemplateColumn Context="supplier">
+        <a href="@($"suppliers/edit?suppid={supplier.SuppId}")">Edit</a> |
+        <a href="@($"suppliers/details?suppid={supplier.SuppId}")">Details</a> |
+        <a href="@($"suppliers/delete?suppid={supplier.SuppId}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

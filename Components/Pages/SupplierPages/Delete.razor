@@ -1,0 +1,101 @@
+﻿@page "/suppliers/delete"
+@inject StoreApp.Data.StoreDbContext DB
+@using StoreApp.Data
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Supplier</h4>
+    <hr />
+    @if (supplier is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">SuppCode</dt>
+            <dd class="col-sm-10">@supplier.SuppCode</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@supplier.Name</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">RegNo</dt>
+            <dd class="col-sm-10">@supplier.RegNo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Address</dt>
+            <dd class="col-sm-10">@supplier.Address</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ContactNo</dt>
+            <dd class="col-sm-10">@supplier.ContactNo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">CreditLimit</dt>
+            <dd class="col-sm-10">@supplier.CreditLimit</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Balance</dt>
+            <dd class="col-sm-10">@supplier.Balance</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">PaymentDueNext</dt>
+            <dd class="col-sm-10">@supplier.PaymentDueNext</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">PaymentSchedule</dt>
+            <dd class="col-sm-10">@supplier.PaymentSchedule</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">VatRegNo</dt>
+            <dd class="col-sm-10">@supplier.VatRegNo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">BankName</dt>
+            <dd class="col-sm-10">@supplier.BankName</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">BankAccountNumber</dt>
+            <dd class="col-sm-10">@supplier.BankAccountNumber</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">SortCode</dt>
+            <dd class="col-sm-10">@supplier.SortCode</dd>
+        </dl>
+        <EditForm method="post" Model="supplier" OnValidSubmit="DeleteSupplier" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(supplier is null)">Delete</button> |
+            <a href="/suppliers">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    Supplier? supplier;
+
+    [SupplyParameterFromQuery]
+    public int SuppId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        supplier = await DB.Suppliers.FirstOrDefaultAsync(m => m.SuppId == SuppId);
+
+        if (supplier is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    public async Task DeleteSupplier()
+    {
+        DB.Suppliers.Remove(supplier!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/suppliers");
+    }
+}

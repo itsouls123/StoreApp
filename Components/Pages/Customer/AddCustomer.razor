@@ -1,0 +1,26 @@
+﻿@page "/addcustomer"
+@using StoreApp.Data
+@using StoreApp.Services
+@inject CustomerService customerService;
+<h3>AddCustomer</h3>
+<EditForm Model=Model OnSubmit="HandleSubmit" FormName="custfrm">
+    <label for="NameInput">Name</label>
+    <InputText id="NameInput" @bind-Value="@Model.Name"></InputText>
+    <label for="FNameInput">FName</label>
+    <InputText id="FNameInput" @bind-Value="@Model.FName"></InputText>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Customer? Model { get; set; }
+
+    protected override void OnInitialized() => Model ??= new();
+   
+    public void HandleSubmit(EditContext editContext)
+    {
+        var newCustomer = (Customer)editContext.Model;
+        customerService.AddCustomer(newCustomer);
+    }
+
+}
